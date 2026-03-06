@@ -21,8 +21,10 @@ def prepare():
     circuitpy.mkdir()
 
     if src.is_file():
+        print(f"Copying file {src} to {dst}")
         shutil.copy(src, dst)
     else:
+        print(f"Copying folder {src} to {dst}")
         shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
