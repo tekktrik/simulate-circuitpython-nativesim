@@ -27,7 +27,6 @@ runs:
       with:
         repository: adafruit/circuitpython
         path: ${{ inputs.circuitpython-folder }}
-        fetch-depth: 1
         # TODO: I don't think the version of CircuitPython should matter for repo checkout
     # - name: Cache firmware build
     #   id: cache-firmware
