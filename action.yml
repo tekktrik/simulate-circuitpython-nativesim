@@ -18,10 +18,10 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup Python 3.X
+    - name: Setup Python 3.12
       uses: actions/setup-python@v6
       with:
-        python-version: 3.X
+        python-version: 3.12
     - name: Checkout CircuitPython repository
       uses: actions/checkout@v6
       with:
