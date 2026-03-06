@@ -38,11 +38,10 @@ runs:
       uses: actions/cache@v5
       with:
         path: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp/build-native_native_sim/firmware.exe
-        # TODO: Change key later, especially if selecting CircuitPython version
-        key: zephyr-cache
+        key: ${{ inputs.version }}-zephyr-cache
     - name: Install system dependencies
       shell: bash
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: |
         sudo apt-get update
         sudo apt-get install -y \
@@ -56,59 +55,49 @@ runs:
     - name: Fetch submodules
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: make fetch-port-submodules
     - name: Install CircuitPython dev dependencies
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: pip install -r requirements-dev.txt
-    # - name: Compile mpy-cross
-    #   shell: bash
-    #   working-directory: ${{ inputs.circuitpython-folder }}
-    #   #if: steps.cache-firmware.outputs.cache-hit != 'true'
-    #   run: make -C mpy-cross
-    # - name: Install system dependencies
-    #   shell: bash
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get install -y libusb-1.0-0-dev libudev-dev mtools protobuf-compiler
     - name: Install west
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: pip install west
     - name: Create west workspace
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: west init -l zephyr-config
     - name: Update west project
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: west update
     - name: Export Zephyr installation
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: west zephyr-export
     - name: Install Zephyr script dependencies
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: | 
         pip install -r zephyr/scripts/requirements.txt
         pip install protobuf grpcio-tools
     - name: Install Zephyr SDK
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: west sdk install
     - name: Make the firmware
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
+      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: make BOARD=native_native_sim BUILD=build-native_native_sim build-native_native_sim/firmware.exe
     - name: Create flash space
       shell: bash
@@ -131,5 +120,3 @@ runs:
       run: |
         SIM_OUTPUT=$(python ${{ github.action_path }}/scripts/simulate.py)
         echo "simout=$SIM_OUTPUT" >> "$GITHUB_OUTPUT"
-
-# TODO: Eventually allow CircuitPython version selection
