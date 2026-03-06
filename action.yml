@@ -59,11 +59,11 @@ runs:
       working-directory: ${{ inputs.circuitpython-folder }}
       #if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: pip install -r requirements-dev.txt
-    - name: Compile mpy-cross
-      shell: bash
-      working-directory: ${{ inputs.circuitpython-folder }}
-      #if: steps.cache-firmware.outputs.cache-hit != 'true'
-      run: make -C mpy-cross
+    # - name: Compile mpy-cross
+    #   shell: bash
+    #   working-directory: ${{ inputs.circuitpython-folder }}
+    #   #if: steps.cache-firmware.outputs.cache-hit != 'true'
+    #   run: make -C mpy-cross
     # - name: Install system dependencies
     #   shell: bash
     #   run: |
