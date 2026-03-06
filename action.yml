@@ -41,7 +41,6 @@ runs:
         key: ${{ inputs.version }}-zephyr-cache
     - name: Install system dependencies
       shell: bash
-      if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: |
         sudo apt-get update
         sudo apt-get install -y \
