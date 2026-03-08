@@ -85,7 +85,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
       if: steps.cache-firmware.outputs.cache-hit != 'true'
-      run: | 
+      run: |
         pip install -r zephyr/scripts/requirements.txt
         pip install protobuf grpcio-tools
     - name: Install Zephyr SDK
@@ -118,4 +118,8 @@ runs:
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
       run: |
         SIM_OUTPUT=$(python ${{ github.action_path }}/scripts/simulate.py)
-        echo "simout=$SIM_OUTPUT" >> "$GITHUB_OUTPUT"
+        {
+          echo "simout<<EOF"
+          echo "$SIM_OUTPUT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"

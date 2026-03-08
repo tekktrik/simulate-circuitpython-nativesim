@@ -36,18 +36,24 @@ class Simualtor:
         recording: bool | None = None
         recorded = ""
 
-        while self.simproc.poll() and (line := self.simproc.stdout.readline()):
+        while self.simproc.poll() is None:
+            pass
+
+        output: str = self.simproc.stdout.read().decode()
+        for line in output.split("\n"):
+            encoded = line.encode()
             if not line:
                 continue
-            line: bytes
-            decoded = line.decode()
-            if decoded.strip() == "code.py output:" and recording is False:
+            if (
+                encoded.strip() == b"\x1b[2K\x1b[0Gcode.py output:"
+                and recording is None
+            ):
                 recording = True
-            elif decoded.strip() == "Code done running." and recording:
-                recorded = False
+            elif line.strip() == "Code done running." and recording:
+                recording = False
                 break
             elif recording:
-                recorded += decoded
+                recorded += line + "\n"
 
         result = recorded.strip()
 
