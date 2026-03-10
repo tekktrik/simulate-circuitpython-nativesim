@@ -3,12 +3,13 @@
 
 """Prepare the CIRCUITPY drive."""
 
-import sys
 import pathlib
 import shutil
+import sys
 
 
 def prepare():
+    """Prepare the CIRCUITPY drive folder."""
     src = pathlib.Path(sys.argv[1])
     dst = pathlib.Path(sys.argv[2])
 
