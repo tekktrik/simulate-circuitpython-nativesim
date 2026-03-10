@@ -11,6 +11,7 @@ inputs:
   circuitpy:
     description: 'Filepath to file or folder of files to add to the simualted CIRCUITPY'
     required: true
+    default: ''
   circuitpython-folder:
     description: 'Folder name to use for the CircuitPython checkout'
     required: true
@@ -131,6 +132,7 @@ runs:
       id: run-sim
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
+      if: inputs.circuitpy != ''
       run: |
         SIM_OUTPUT=$(simulate-circuitpython)
         {
