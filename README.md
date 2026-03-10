@@ -1,4 +1,4 @@
-# simulate-circuitpython
+# simulate-circuitpython-nativesim
 Simulate CircuitPython using Zephyr simulator
 
 ## Inputs
