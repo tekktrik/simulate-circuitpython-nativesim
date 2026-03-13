@@ -5,6 +5,7 @@
 
 """Slim and simple version of the CircuitPython Zephyr test infrastructure."""
 
+import pathlib
 import subprocess
 import sys
 
@@ -14,10 +15,12 @@ class Simualtor:
 
     def __init__(self, firmware_filepath: str, flash_filepath: str, timeout: int = 5) -> None:
         """Intialize the simulator."""
+        self.firmware_path = pathlib.Path(firmware_filepath).absolute()
+        self.flash_path = pathlib.Path(flash_filepath).absolute()
         self.simproc: subprocess.Popen | None = None
         self.cmd = [
-            firmware_filepath,
-            f"--flash={flash_filepath}",
+            str(self.firmware_path),
+            f"--flash={str(self.flash_path)}",
             "-rt",
             "-uart_stdinout",
             f"-stop_at={timeout}",
