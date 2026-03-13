@@ -7,10 +7,8 @@ inputs:
   version:
     description: 'Version of CircuitPython to simulate'
     required: true
+    # TODO: Should default to latest
     default: main
-  circuitpy:
-    description: 'Filepath to file or folder of files to add to the simualted CIRCUITPY'
-    required: true
   circuitpython-folder:
     description: 'Folder name to use for the CircuitPython checkout'
     required: true
@@ -110,17 +108,3 @@ runs:
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
       if: steps.cache-firmware.outputs.cache-hit != 'true'
       run: make BOARD=native_native_sim BUILD=build-native_native_sim build-native_native_sim/firmware.exe
-    - name: Create flash space
-      shell: bash
-      working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      run: |
-        truncate -s 2M build-native_native_sim/flash.bin
-        mformat -i build-native_native_sim/flash.bin ::
-    - name: Create CIRCUITPY folder
-      shell: bash
-      run: |
-        python ${{ github.action_path }}/../scripts/prepare.py ${{ inputs.circuitpy }} ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-    - name: Add files to flash
-      shell: bash
-      working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      run: mcopy -s -i build-native_native_sim/flash.bin CIRCUITPY/* ::;

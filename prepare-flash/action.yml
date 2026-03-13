@@ -1,0 +1,34 @@
+# SPDX-FileCopyrightText: 2026 Alec Delaney
+# SPDX-License-Identifier: MIT
+
+name: 'Simulate CircuitPython'
+description: 'Simulate CircuitPython using Zephyr simulator'
+inputs:
+  circuitpy:
+    description: 'Filepath to file or folder of files to add to the simualted CIRCUITPY'
+    required: true
+  circuitpython-folder:
+    description: 'Folder name to use for the CircuitPython checkout'
+    required: true
+    default: 'cpysim'
+outputs:
+  output-text:
+    description: 'The text output from the simulator'
+    value: ${{ steps.run-sim.outputs.simout }}
+runs:
+  using: "composite"
+  steps:
+    - name: Create flash space
+      shell: bash
+      working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
+      run: |
+        truncate -s 2M build-native_native_sim/flash.bin
+        mformat -i build-native_native_sim/flash.bin ::
+    - name: Create CIRCUITPY folder
+      shell: bash
+      run: |
+        python ${{ github.action_path }}/../scripts/prepare.py ${{ inputs.circuitpy }} ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
+    - name: Add files to flash
+      shell: bash
+      working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
+      run: mcopy -s -i build-native_native_sim/flash.bin CIRCUITPY/* ::;
