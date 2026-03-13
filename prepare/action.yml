@@ -119,22 +119,8 @@ runs:
     - name: Create CIRCUITPY folder
       shell: bash
       run: |
-        python ${{ github.action_path }}/scripts/prepare.py ${{ inputs.circuitpy }} ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
+        python ${{ github.action_path }}/../scripts/prepare.py ${{ inputs.circuitpy }} ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
     - name: Add files to flash
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
       run: mcopy -s -i build-native_native_sim/flash.bin CIRCUITPY/* ::;
-    - name: Install simulator command
-      shell: bash
-      run: pipx install ${{ github.action_path }}
-    - name: Run simulator script
-      id: run-sim
-      shell: bash
-      working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
-      run: |
-        SIM_OUTPUT=$(simulate-circuitpython)
-        {
-          echo "simout<<EOF"
-          echo "$SIM_OUTPUT"
-          echo "EOF"
-        } >> "$GITHUB_OUTPUT"

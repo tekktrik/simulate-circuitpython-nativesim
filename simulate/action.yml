@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2026 Alec Delaney
+# SPDX-License-Identifier: MIT
+
+name: 'Simulate CircuitPython'
+description: 'Simulate CircuitPython using Zephyr simulator'
+inputs:
+  circuitpython-folder:
+    description: 'Folder name to use for the CircuitPython checkout'
+    required: true
+    default: 'cpysim'
+outputs:
+  output-text:
+    description: 'The text output from the simulator'
+    value: ${{ steps.run-sim.outputs.simout }}
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Python 3.12
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.12"
+    - name: Install simulator command
+      shell: bash
+      run: pipx install ../${{ github.action_path }}
+    - name: Run simulator script
+      id: run-sim
+      shell: bash
+      working-directory: ${{ inputs.circuitpython-folder }}/ports/zephyr-cp
+      run: |
+        SIM_OUTPUT=$(simulate-circuitpython)
+        {
+          echo "simout<<EOF"
+          echo "$SIM_OUTPUT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
