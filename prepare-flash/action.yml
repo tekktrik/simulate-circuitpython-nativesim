@@ -32,3 +32,6 @@ runs:
     - name: Create flash space
       shell: bash
       run: prepare-flash ${{ inputs.flash-filepath }} ${{ inputs.circuitpy }}
+    - name: Uninstall flash preparation command
+      shell: bash
+      run: pipx uninstall simulate-circuitpython-nativesim

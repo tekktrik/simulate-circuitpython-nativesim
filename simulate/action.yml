@@ -48,3 +48,6 @@ runs:
           echo "$SIM_OUTPUT"
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
+    - name: Uninstall simulator script
+      shell: bash
+      run: pipx uninstall simulate-circuitpython-nativesim
