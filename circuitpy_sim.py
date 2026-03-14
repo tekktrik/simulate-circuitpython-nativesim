@@ -13,38 +13,37 @@ import sys
 class Simualtor:
     """Zephyr OS native sim wrapper."""
 
-    def __init__(self, firmware_filepath: str, flash_filepath: str, timeout: int = 5) -> None:
-        """Intialize the simulator."""
-        self.firmware_path = pathlib.Path(firmware_filepath).absolute()
-        self.flash_path = pathlib.Path(flash_filepath).absolute()
-        self.simproc: subprocess.Popen | None = None
-        self.cmd = [
-            str(self.firmware_path),
-            f"--flash={str(self.flash_path)}",
+    @staticmethod
+    def simulate(firmware_filepath: str, flash_filepath: str, timeout: int = 5) -> str:
+        """Simulate using the native sim firmware."""
+        firmware_path = pathlib.Path(firmware_filepath).absolute()
+        flash_path = pathlib.Path(flash_filepath).absolute()
+        
+        cmd = [
+            str(firmware_path),
+            f"--flash={str(flash_path)}",
             "-rt",
             "-uart_stdinout",
             f"-stop_at={timeout}",
         ]
 
-    def simulate(self) -> str:
-        """Simulate using the native sim firmware."""
-        self.simproc = subprocess.Popen(
-            self.cmd,
+        simproc = subprocess.Popen(
+            cmd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=None,
         )
 
-        if self.simproc.stdout is None:
+        if simproc.stdout is None:
             raise RuntimeError("Failed to capture simulator output")
 
         recording: bool | None = None
         recorded = ""
 
-        while self.simproc.poll() is None:
+        while simproc.poll() is None:
             pass
 
-        output: str = self.simproc.stdout.read().decode()
+        output: str = simproc.stdout.read().decode()
         for line in output.split("\n"):
             encoded = line.encode()
             if not line:
@@ -62,8 +61,8 @@ class Simualtor:
 
         return recorded.strip()
     
-    @classmethod
-    def prepare_flash(cls, flash_filepath: str, circuitpy_filepath: str) -> None:
+    @staticmethod
+    def prepare_flash(flash_filepath: str, circuitpy_filepath: str) -> None:
         """Prepare the native sim flash."""
         flash_path = str(pathlib.Path(flash_filepath).absolute())
         circuitpy_abspath = pathlib.Path(circuitpy_filepath).absolute()
@@ -110,8 +109,7 @@ class Simualtor:
 
 def simulate_circuitpython() -> None:
     """Simulate CircuitPython using a simulator."""
-    simulator = Simualtor(sys.argv[1], sys.argv[2])
-    result = simulator.simulate()
+    result = Simualtor.simulate(sys.argv[1], sys.argv[2])
     print(result)
 
 
