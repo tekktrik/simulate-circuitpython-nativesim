@@ -109,7 +109,7 @@ def simulate_circuitpython_cmdline() -> None:
 
 
 def prepare_flash_cmdline() -> None:
-    """PRepare flash for the simulator."""
+    """Prepare flash for the simulator."""
     flash_filepath = sys.argv[1]
     circuitpy_filepath = sys.argv[2]
     prepare_flash(flash_filepath, circuitpy_filepath)
