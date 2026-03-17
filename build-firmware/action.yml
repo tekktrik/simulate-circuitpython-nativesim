@@ -109,5 +109,3 @@ runs:
       id: cache-hit
       shell: bash
       run: echo "cached=${{ steps.cache-firmware.outputs.cache-hit }}" >> "$GITHUB_OUTPUT"
-
-    # TODO: Upload firmware as an artifact
