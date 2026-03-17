@@ -23,12 +23,26 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Get latest CircuitPython version
+      id: latest-cpy-version
+      if: inputs.version == 'latest'
+      uses: tekktrik/latest-circuitpython-version@v1
+    - name: Determine checkout ref
+      id: checkout-ref
+      shell: bash
+      run: |
+        if [[ "${{ inputs.version }}" == "latest" ]]; then
+          CHECKOUT_REF="${{ steps.latest-cpy-version.outputs.version }}"
+        else
+          CHECKOUT_REF="${{ inputs.version }}"
+        fi
+        echo "ref=$CHECKOUT_REF" >> "$GITHUB_OUTPUT"
     - name: Checkout CircuitPython repository
       uses: actions/checkout@v6
       with:
         repository: adafruit/circuitpython
         path: ${{ inputs.circuitpython-folder }}
-        ref: ${{ inputs.version }}
+        ref: ${{ steps.checkout-ref.outputs.ref }}
         fetch-depth: 0
     - name: Get latest CircuitPython version
       id: latest-cpy-version
@@ -38,13 +52,11 @@ runs:
       shell: bash
       working-directory: ${{ inputs.circuitpython-folder }}
       run: |
-        if [[ "${{ inputs.version }}" == "main" ]]; then
+        if [[ "${{ steps.checkout-ref.outputs.ref }}" == "main" ]]; then
           GITREV=$(git rev-parse --short HEAD)
           CACHE_KEY="$GITREV-zephyr-cache"
-        elif [[ "${{ inputs.version }}" == "latest" ]]; then
-          CACHE_KEY="${{ steps.latest-cpy-version.outputs.version }}-zephyr-cache"
         else
-          CACHE_KEY="${{ inputs.version }}-zephyr-cache"
+          CACHE_KEY="${{ steps.checkout-ref.outputs.ref }}-zephyr-cache"
         fi
         echo "cache-key=$CACHE_KEY" >> "$GITHUB_OUTPUT"
     - name: Cache firmware build
