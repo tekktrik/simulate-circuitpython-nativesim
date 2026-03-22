@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: 2026 Alec Delaney
+# SPDX-License-Identifier: MIT
+
+name: 'Simulate CircuitPython'
+description: 'Simulate CircuitPython and print the results'
+inputs:
+  version:
+    description: 'Version of CircuitPython to simulate'
+    required: true
+    default: latest
+  circuitpython-folder:
+    description: 'Folder name to use for the CircuitPython checkout, if needed'
+    required: true
+    default: 'cpysim'
+  firmware-filepath:
+    description: 'Filepath for the built firmware'
+    required: true
+    default: './firmware.exe'
+  flash-filepath:
+    description: 'Filepath for the desired flash binary file'
+    required: true
+    default: './flash.bin'
+  circuitpy:
+    description: 'Filepath to file or folder of files to add to the simualted CIRCUITPY'
+    required: true
+outputs:
+  restored:
+    description: 'Whether the firmware was restored from cache'
+    value: ${{ steps.build-firwmare.outputs.cached }}
+  output-text:
+    description: 'The text output from the simulator'
+    value: ${{ steps.run-simulator.outputs.simout }}
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare system
+      uses: ${{ github.action_path }}/prepare-system
+    - name: Build firmware
+      id: build-firmware
+      uses: ${{ github.action_path }}/build-firmware
+      with:
+        version: ${{ inputs.version }}
+        circuitpython-folder: ${{ inputs.circuitpython-folder }}
+        firmware-filepath: ${{ inputs.firmware-filepath }}
+    - name: Prepare flash
+      uses: ${{ github.action_path }}/prepare-flash
+      with:
+        flash-filepath: ${{ inputs.flash-filepath }}
+        circuitpy: ${{ inputs.circuitpy }}
+    - name: Run simulator
+      id: run-simulator
+      uses: ${{ github.action_path }}/simulate
+      with:
+        firmware-filepath: ${{ inputs.firmware-filepath }}
+        flash-filepath: ${{ inputs.flash-filepath }}
