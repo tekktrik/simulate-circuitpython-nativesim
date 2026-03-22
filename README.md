@@ -2,6 +2,27 @@
 
 Simulate CircuitPython using Zephyr simulator
 
+### Inputs
+
+| Argument Name | Description | Default | Notes |
+| --- | --- | --- | --- |
+| ``version`` | Version of CircuitPython to simulate | ``latest`` | Must be a version that supports the Zephyr OS native sim |
+| ``circuitpython-folder`` | Folder name to use for the CircuitPython checkout | ``cpysim`` | Change this if it conflicts with another file/folder |
+| ``firmware-filepath`` | Filepath for the built firmware | ``./firmware.exe`` |  |
+| ``flash-filepath`` | Filepath for the desired flash binary file | ``./flash.bin`` |  |
+| ``circuitpy`` | Filepath to file or folder of files to add to the simualted CIRCUITPY | N/A (required) |  |
+
+### Outputs
+
+| Argument Name | Description | Notes |
+| --- | --- | --- |
+| ``restored`` | Whether the firmware was restored from cache |  |
+| ``output-text`` | The text output from the simulator |  |
+
+# Sub-Actions
+
+This action also allows each of the steps to be run individually.  This allows the Python library to be used for better scripting.
+
 ## prepare-system
 
 Prepare the runner for the simulator (and possible build process)
