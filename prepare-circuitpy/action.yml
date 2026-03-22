@@ -34,7 +34,7 @@ runs:
         fi
         echo "allowed=$ARGS_ALLOWED" >> "$GITHUB_OUTPUT"
     - name: Set failure (if necessary)
-      if: steps.dep-ver-check.outputs.allowed != true
+      if: steps.dep-ver-check.outputs.allowed != 'true'
       uses: actions/github-script@v8
       with:
         script: core.setFailed('`version` must also be provided if `dependencies-file` is given');
