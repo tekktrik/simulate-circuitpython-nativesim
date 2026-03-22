@@ -1,0 +1,84 @@
+# SPDX-FileCopyrightText: 2026 Alec Delaney
+# SPDX-License-Identifier: MIT
+
+name: 'Prepare CIRCUITPY'
+description: 'Prepare the CIRCUITPY folder'
+inputs:
+  code-py:
+    description: 'Filepath for the desired code.py file'
+    required: false
+    default: ''
+  dependencies-file:
+    description: 'Filepath for a dependency file for circup'
+    required: false
+    default: ''
+  version:
+    description: The version of CircuitPython to use (if dependencies given)
+    required: false
+    default: latest
+  circuitpy:
+    description: 'Filepath to the CIRCUITPY folder to be created'
+    required: true
+    default: 'CIRCUITPY'
+runs:
+  using: "composite"
+  steps:
+    - name: Check if both dependencies and version
+      id: dep-ver-check
+      shell: bash
+      run: |
+        if [[ -n "${{ inputs.dependencies-file }}" && -z "${{ inputs.version }}" ]]; then
+          ARGS_ALLOWED="false"
+        else
+          ARGS_ALLOWED="true"
+        fi
+        echo "allowed=$ARGS_ALLOWED" >> "$GITHUB_OUTPUT"
+    - name: Set failure (if necessary)
+      if: steps.dep-ver-check.outputs.allowed != 'true'
+      uses: actions/github-script@v8
+      with:
+        script: core.setFailed('`version` must also be provided if `dependencies-file` is given');
+    - name: Check if CIRCUITPY exists
+      id: circuitpy-check
+      shell: bash
+      run: |
+        if [[ -d "${{ inputs.circuitpy }}" ]]; then
+          echo "exists=true" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Create CIRCUITPY for simulator
+      shell: bash
+      if: steps.circuitpy-check.outputs.exists != 'true'
+      run: mkdir -p ${{ inputs.circuitpy }}
+    - name: Move the code.py file to the drive
+      shell: bash
+      if: inputs.code-py != ''
+      run: cp ${{ inputs.code-py }} ${{ inputs.circuitpy }}/code.py
+    - name: Download circup
+      shell: bash
+      if: inputs.dependencies-file != ''
+      run: pipx install circup
+    - name: Determine latest CircuitPython version (if necessary)
+      if: inputs.dependencies-file != '' && inputs.version == 'latest'
+      id: latest-cpy-version
+      uses: tekktrik/latest-circuitpython-version@v1
+    - name: Finalize CircuitPython version to use
+      id: cpy-version
+      shell: bash
+      if: inputs.dependencies-file != ''
+      run: |
+        if [[ "${{ inputs.version }}" == 'latest' ]]; then
+          CPY_VERSION="${{ steps.latest-cpy-version.outputs.version }}"
+        else
+          CPY_VERSION=${{ inputs.version }}
+        fi
+        echo "version=$CPY_VERSION" >> "$GITHUB_OUTPUT"
+    - name: Copy library dependencies to CIRCUITPY
+      if: inputs.dependencies-file != ''
+      shell: bash
+      run: |
+        circup \
+        --path CIRCUITPY \
+        --cpy-version ${{ steps.cpy-version.outputs.version }} \
+        --board-id raspberry-pi-pico \
+        install \
+        -r ${{ inputs.dependencies-file }}
