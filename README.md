@@ -4,7 +4,7 @@ Simulate CircuitPython using Zephyr simulator
 
 ### Inputs
 
-| Argument Name | Description | Default | Notes |
+| Argument | Description | Default | Notes |
 | --- | --- | --- | --- |
 | ``version`` | Version of CircuitPython to simulate | ``latest`` | Must be a version that supports the Zephyr OS native sim |
 | ``circuitpython-folder`` | Folder name to use for the CircuitPython checkout | ``cpysim`` | Change this if it conflicts with another file/folder |
@@ -14,7 +14,7 @@ Simulate CircuitPython using Zephyr simulator
 
 ### Outputs
 
-| Output Name | Description | Notes |
+| Output | Description | Notes |
 | --- | --- | --- |
 | ``restored`` | Whether the firmware was restored from cache |  |
 | ``output-text`` | The text output from the simulator |  |
@@ -41,7 +41,7 @@ Build the nativesim firmware (or use a cached version if available)
 
 ### Inputs
 
-| Argument Name | Description | Default | Notes |
+| Argument | Description | Default | Notes |
 | --- | --- | --- | --- |
 | ``version`` | Version of CircuitPython to simulate | ``latest`` | Must be a version that supports the Zephyr OS native sim |
 | ``circuitpython-folder`` | Folder name to use for the CircuitPython checkout | ``cpysim`` | Change this if it conflicts with another file/folder |
@@ -49,7 +49,7 @@ Build the nativesim firmware (or use a cached version if available)
 
 ### Outputs
 
-| Output Name | Description | Notes |
+| Output | Description | Notes |
 | --- | --- | --- |
 | ``restored`` | Whether the firmware was restored from cache |  |
 
@@ -59,7 +59,7 @@ Prepare the flash space for the simulator
 
 ### Inputs
 
-| Argument Name | Description | Default | Notes |
+| Argument | Description | Default | Notes |
 | --- | --- | --- | --- |
 | ``flash-filepath`` | Filepath for the desired flash binary file | ``./flash.bin`` |  |
 | ``circuitpy`` | Filepath to file or folder of files to add to the simualted CIRCUITPY | N/A (required) |  |
@@ -74,14 +74,14 @@ Run the simulator
 
 ### Inputs
 
-| Argument Name | Description | Default | Notes |
+| Argument | Description | Default | Notes |
 | --- | --- | --- | --- |
 | ``firmware-filepath`` | Filepath for the built firmware | ``./firmware.exe`` |  |
 | ``flash-filepath`` | Filepath for the desired flash binary file | ``./flash.bin`` |  |
 
 ### Outputs
 
-| Output Name | Description | Notes |
+| Output | Description | Notes |
 | --- | --- | --- |
 | ``output-text`` | The text output from the simulator |  |
 
