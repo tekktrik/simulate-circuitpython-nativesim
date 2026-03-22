@@ -14,7 +14,7 @@ Simulate CircuitPython using Zephyr simulator
 
 ### Outputs
 
-| Argument Name | Description | Notes |
+| Output Name | Description | Notes |
 | --- | --- | --- |
 | ``restored`` | Whether the firmware was restored from cache |  |
 | ``output-text`` | The text output from the simulator |  |
@@ -49,7 +49,7 @@ Build the nativesim firmware (or use a cached version if available)
 
 ### Outputs
 
-| Argument Name | Description | Notes |
+| Output Name | Description | Notes |
 | --- | --- | --- |
 | ``restored`` | Whether the firmware was restored from cache |  |
 
@@ -81,7 +81,7 @@ Run the simulator
 
 ### Outputs
 
-| Argument Name | Description | Notes |
+| Output Name | Description | Notes |
 | --- | --- | --- |
 | ``output-text`` | The text output from the simulator |  |
 
