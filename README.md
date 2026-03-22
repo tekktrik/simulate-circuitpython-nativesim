@@ -32,6 +32,23 @@ Build the nativesim firmware (or use a cached version if available)
 | --- | --- | --- |
 | ``restored`` | Whether the firmware was restored from cache |  |
 
+## prepare-circuitpy
+
+Prepare the CIRCUITPY folder
+
+### Inputs
+
+| Argument Name | Description | Default | Notes |
+| --- | --- | --- | --- |
+| ``code-py`` | Filepath for the desired code.py file | ``''`` |  |
+| ``dependencies-file`` | Filepath for a dependency file for circup | ``''`` |  |
+| ``version`` | The version of CircuitPython to use (if dependencies given) | ``latest`` |  |
+| ``circuitpyn`` | Filepath to the CIRCUITPY folder to be created | ``CIRCUITPY`` |  |
+
+### Outputs
+
+None
+
 ## prepare-flash
 
 Prepare the flash space for the simulator
