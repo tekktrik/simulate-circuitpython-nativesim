@@ -34,22 +34,22 @@ runs:
   using: "composite"
   steps:
     - name: Prepare system
-      uses: ./prepare-system
+      uses: ${{ github.action_path }}/prepare-system
     - name: Build firmware
       id: build-firmware
-      uses: ./build-firmware
+      uses: ${{ github.action_path }}/build-firmware
       with:
         version: ${{ inputs.version }}
         circuitpython-folder: ${{ inputs.circuitpython-folder }}
         firmware-filepath: ${{ inputs.firmware-filepath }}
     - name: Prepare flash
-      uses: ./prepare-flash
+      uses: ${{ github.action_path }}/prepare-flash
       with:
         flash-filepath: ${{ inputs.flash-filepath }}
         circuitpy: ${{ inputs.circuitpy }}
     - name: Run simulator
       id: run-simulator
-      uses: ./simulate
+      uses: ${{ github.action_path }}/simulate
       with:
         firmware-filepath: ${{ inputs.firmware-filepath }}
         flash-filepath: ${{ inputs.flash-filepath }}
