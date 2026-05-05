@@ -17,6 +17,7 @@ def simulate(firmware_filepath: str, flash_filepath: str, timeout: int = 5) -> s
 
     cmd = [
         "xvfb-run",
+        "-a",
         str(firmware_path),
         f"--flash={str(flash_path)}",
         "-rt",
