@@ -20,4 +20,5 @@ runs:
           gcc-multilib \
           g++-multilib \
           libsdl2-2.0-0:i386 \
-          libsdl2-image-2.0-0:i386
+          libsdl2-image-2.0-0:i386 \
+          xvfb
