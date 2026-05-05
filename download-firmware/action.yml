@@ -1,0 +1,40 @@
+# SPDX-FileCopyrightText: 2026 Alec Delaney
+# SPDX-License-Identifier: MIT
+
+name: 'Download CircuitPython simulator'
+description: 'Download the Zephyr simulator firmware'
+inputs:
+  version:
+    description: 'Version of CircuitPython to simulate'
+    required: true
+    default: latest
+  firmware-filepath:
+    description: 'Filepath for the built firmware'
+    required: true
+    default: './firmware.exe'
+outputs:
+  version:
+    description: 'The firmware version downloaded'
+    value: ${{ steps.firmware-ref.outputs.ref }}
+runs:
+  using: "composite"
+  steps:
+    - name: Get latest CircuitPython version
+      id: latest-cpy-version
+      if: inputs.version == 'latest'
+      uses: tekktrik/latest-circuitpython-version@v1
+    - name: Determine checkout ref
+      id: firmware-ref
+      shell: bash
+      run: |
+        if [[ "${{ inputs.version }}" == "latest" ]]; then
+          CHECKOUT_REF="${{ steps.latest-cpy-version.outputs.version }}"
+        else
+          CHECKOUT_REF="${{ inputs.version }}"
+        fi
+        echo "ref=$CHECKOUT_REF" >> "$GITHUB_OUTPUT"
+    - name: Download simulator firmware
+      shell: bash
+      run: |
+        curl -o "${{ inputs.firmware-filepath }}" "https://adafruit-circuit-python.s3.amazonaws.com/bin/native_native_sim/en_US/adafruit-circuitpython-native_native_sim-en_US-${{ steps.firmware-ref.outputs.ref }}.exe"
+    
