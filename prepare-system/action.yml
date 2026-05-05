@@ -9,7 +9,6 @@ runs:
     - name: Install system dependencies
       shell: bash
       run: |
-        SDL_VIDEO_DRIVER=dummy
         sudo dpkg --add-architecture i386
         sudo apt-get update
         sudo apt-get install -y \
@@ -22,4 +21,3 @@ runs:
           g++-multilib \
           libsdl2-2.0-0:i386 \
           libsdl2-image-2.0-0:i386
-
