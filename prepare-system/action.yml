@@ -17,4 +17,5 @@ runs:
           protobuf-compiler \
           dosfstools \
           gcc-multilib \
-          g++-multilib
+          g++-multilib \
+          libsdl2-dev
