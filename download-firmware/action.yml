@@ -9,7 +9,7 @@ inputs:
     required: true
     default: latest
   firmware-filepath:
-    description: 'Filepath for the built firmware'
+    description: 'Filepath for the downloaded firmware'
     required: true
     default: './firmware.exe'
 outputs:
