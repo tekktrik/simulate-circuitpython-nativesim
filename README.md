@@ -32,6 +32,23 @@ Build the nativesim firmware (or use a cached version if available)
 | --- | --- | --- |
 | ``restored`` | Whether the firmware was restored from cache |  |
 
+## download-firmware
+
+Download the Zephyer simulator firmware
+
+### Inputs
+
+| Argument Name | Description | Default | Notes |
+| --- | --- | --- | --- |
+| ``version`` | Version of CircuitPython to simulate | ``latest`` | Must be a version that supports the Zephyr OS native sim |
+| ``firmware-filepath`` | Filepath for the downloaded firmware | ``./firmware.exe`` |  |
+
+### Outputs
+
+| Argument Name | Description | Notes |
+| --- | --- | --- |
+| ``version`` | The firmware version downloaded |  |
+
 ## prepare-circuitpy
 
 Prepare the CIRCUITPY folder
